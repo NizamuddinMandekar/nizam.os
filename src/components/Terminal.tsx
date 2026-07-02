@@ -86,8 +86,18 @@ export default function Terminal() {
     }
   };
 
+  // scroll so the newest command starts at the top of the viewport,
+  // not the bottom of its output
   useEffect(() => {
-    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight });
+    const el = scrollRef.current;
+    if (!el) return;
+    const entries = el.querySelectorAll<HTMLElement>("[data-entry]");
+    const last = entries[entries.length - 1];
+    if (last) {
+      el.scrollTo({ top: last.offsetTop - 12 });
+    } else {
+      el.scrollTo({ top: el.scrollHeight });
+    }
   }, [history]);
 
   // snake (and other embeds) ask us to take focus back on exit
@@ -273,7 +283,7 @@ export default function Terminal() {
       {/* scrollback */}
       <div
         ref={scrollRef}
-        className="flex-1 overflow-y-auto px-4 sm:px-6 py-4 space-y-4 text-[0.95rem] sm:text-base"
+        className="relative flex-1 overflow-y-auto px-4 sm:px-6 py-4 space-y-4 text-[0.95rem] sm:text-base"
       >
         {ghost && (
           <div className="phosphor-fade space-y-4" aria-hidden="true">
@@ -291,7 +301,7 @@ export default function Terminal() {
           </div>
         )}
         {history.map((entry) => (
-          <div key={entry.id}>
+          <div key={entry.id} data-entry>
             {entry.command !== null && (
               <div className="flex gap-2 flex-wrap">
                 <span>{entry.chat ? CHAT_PROMPT : PROMPT}</span>
