@@ -1,0 +1,8 @@
+node_modules
+dist
+*.local
+.DS_Store
+
+# local source resumes (public/ copy is the published one)
+/nizamuddin_mandekar.pdf
+/Nizamuddin_Mandekar_Resume.pdf

@@ -1,0 +1,157 @@
+@import "tailwindcss";
+
+@theme {
+  --font-mono: "JetBrains Mono", ui-monospace, "Cascadia Code", monospace;
+
+  --color-crt: #04070a;
+  --color-crt-panel: #070d12;
+  --color-phos: #2ee88a;
+  --color-phos-dim: #1a9e5c;
+  --color-cyanx: #38e1ff;
+  --color-amberx: #ffc857;
+  --color-alert: #ff5c72;
+  --color-faint: #4c6b5e;
+  --color-linex: rgba(46, 232, 138, 0.18);
+}
+
+/* glow color as raw rgb triplet so themes can swap it */
+:root {
+  --glow-rgb: 46, 232, 138;
+}
+
+/* ── themes (switch with the `theme` command) ─────────────── */
+html[data-theme="cyan"] {
+  --color-phos: #35d8ff;
+  --color-phos-dim: #1e9cc4;
+  --color-cyanx: #ffc857;
+  --color-faint: #517080;
+  --color-linex: rgba(53, 216, 255, 0.18);
+  --glow-rgb: 53, 216, 255;
+}
+html[data-theme="amber"] {
+  --color-phos: #ffb347;
+  --color-phos-dim: #c47f2a;
+  --color-cyanx: #38e1ff;
+  --color-faint: #7c6a4c;
+  --color-linex: rgba(255, 179, 71, 0.18);
+  --glow-rgb: 255, 179, 71;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-crt);
+  color: var(--color-phos);
+  font-family: var(--font-mono);
+  overflow-x: hidden;
+}
+
+::selection {
+  background: rgba(var(--glow-rgb), 0.35);
+  color: #f4fffa;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(var(--glow-rgb), 0.25);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(var(--glow-rgb), 0.45);
+}
+
+/* phosphor glow text */
+.glow {
+  text-shadow: 0 0 6px rgba(var(--glow-rgb), 0.55), 0 0 24px rgba(var(--glow-rgb), 0.2);
+}
+/* accent glow */
+.glow-cyan {
+  text-shadow: 0 0 6px rgba(56, 225, 255, 0.55), 0 0 24px rgba(56, 225, 255, 0.2);
+}
+
+/* CRT scanlines + vignette overlay (applied to a fixed div) */
+.crt-overlay {
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.22) 0px,
+      rgba(0, 0, 0, 0.22) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+}
+.crt-vignette {
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, 0.55) 100%);
+}
+
+/* subtle screen flicker */
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  92% { opacity: 1; }
+  93% { opacity: 0.92; }
+  94% { opacity: 1; }
+  97% { opacity: 0.96; }
+}
+.crt-flicker {
+  animation: flicker 6s infinite;
+}
+
+/* blinking block cursor */
+@keyframes blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+.cursor-block {
+  display: inline-block;
+  width: 0.6em;
+  height: 1.1em;
+  background: var(--color-phos);
+  vertical-align: text-bottom;
+  animation: blink 1s step-end infinite;
+  box-shadow: 0 0 8px rgba(var(--glow-rgb), 0.7);
+}
+
+/* terminal window chrome */
+.term-window {
+  background: rgba(7, 13, 18, 0.95);
+  border: 1px solid var(--color-linex);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.6),
+    0 0 40px rgba(var(--glow-rgb), 0.08),
+    0 24px 80px rgba(0, 0, 0, 0.7);
+}
+
+/* god-mode toast (konami) */
+@keyframes toast-in {
+  from { opacity: 0; transform: translate(-50%, -12px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+.god-toast {
+  animation: toast-in 0.3s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .crt-flicker {
+    animation: none;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
