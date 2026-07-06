@@ -17,6 +17,10 @@ self.addEventListener("activate", (e) => {
 self.addEventListener("fetch", (e) => {
   const { request } = e;
   if (request.method !== "GET" || !request.url.startsWith(self.location.origin)) return;
+  // let media requests hit the network directly — range requests break when
+  // answered from cache, and the index.html fallback must never reach an <audio>
+  if (request.destination === "audio" || request.destination === "video" || request.headers.get("range"))
+    return;
 
   e.respondWith(
     fetch(request)

@@ -84,8 +84,26 @@ export const sound = {
     }
     const clip = greetClip ?? new Audio(import.meta.env.BASE_URL + "greet.mp3");
     clip.volume = 1;
-    clip.currentTime = 0;
-    clip.play().catch(() => speakGreeting());
+    try {
+      clip.currentTime = 0;
+    } catch {
+      /* no data loaded yet */
+    }
+    // speak instead if the clip errors or never starts (slow network, bad
+    // cache) — play() resolving doesn't guarantee audio actually comes out
+    let done = false;
+    const fallback = () => {
+      if (done) return;
+      done = true;
+      clip.pause();
+      speakGreeting();
+    };
+    const stallTimer = setTimeout(() => {
+      if (clip.paused || clip.currentTime === 0) fallback();
+    }, 2500);
+    clip.addEventListener("playing", () => clearTimeout(stallTimer), { once: true });
+    clip.addEventListener("error", fallback, { once: true });
+    clip.play().catch(fallback);
   },
   isMuted() {
     return muted;
