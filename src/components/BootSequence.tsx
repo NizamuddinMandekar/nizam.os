@@ -57,11 +57,13 @@ export default function BootSequence({ onDone }: { onDone: () => void }) {
       setFinished(true);
       onDone();
     };
+    // pointerup, not pointerdown: on touchscreens pointerdown does not grant
+    // user activation, so audio/speech started from it gets blocked
     window.addEventListener("keydown", enter);
-    window.addEventListener("pointerdown", enter);
+    window.addEventListener("pointerup", enter);
     return () => {
       window.removeEventListener("keydown", enter);
-      window.removeEventListener("pointerdown", enter);
+      window.removeEventListener("pointerup", enter);
     };
   }, [ready, onDone]);
 

@@ -36,9 +36,9 @@ export default function TopBar() {
 
   return (
     <header className="relative z-40 shrink-0 border-b border-linex bg-crt/95">
-      <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between text-base">
-        <p className="text-phos glow select-none">
-          ▞ NIZAM.OS <span className="text-faint">v2.6</span>
+      <div className="max-w-6xl mx-auto px-3 py-3 sm:px-4 sm:py-4 flex items-center justify-between gap-2 text-sm sm:text-base">
+        <p className="text-phos glow select-none whitespace-nowrap shrink-0">
+          ▞ NIZAM.OS <span className="text-faint hidden min-[400px]:inline">v2.6</span>
         </p>
         <span className="text-faint hidden md:block relative h-5 overflow-hidden min-w-[20rem] text-center">
           <AnimatePresence mode="wait" initial={false}>
@@ -54,7 +54,7 @@ export default function TopBar() {
             </motion.span>
           </AnimatePresence>
         </span>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
           <a
             href={profile.github}
             target="_blank"
@@ -62,7 +62,7 @@ export default function TopBar() {
             aria-label="GitHub profile"
             className="text-faint hover:text-phos transition-colors cursor-pointer"
           >
-            <Github className="w-6 h-6" />
+            <Github className="w-5 h-5 sm:w-6 sm:h-6" />
           </a>
           <a
             href={profile.linkedin}
@@ -71,14 +71,14 @@ export default function TopBar() {
             aria-label="LinkedIn profile"
             className="text-faint hover:text-phos transition-colors cursor-pointer"
           >
-            <Linkedin className="w-6 h-6" />
+            <Linkedin className="w-5 h-5 sm:w-6 sm:h-6" />
           </a>
           <a
             href={`mailto:${profile.email}`}
             aria-label="Send email"
             className="text-faint hover:text-phos transition-colors cursor-pointer"
           >
-            <Mail className="w-6 h-6" />
+            <Mail className="w-5 h-5 sm:w-6 sm:h-6" />
           </a>
           {online !== null && (
             <span className="text-faint border-l border-linex pl-3 hidden md:inline">
