@@ -22,9 +22,10 @@ export default function BootSequence({ onDone }: { onDone: () => void }) {
 
   const [poweredOn, setPoweredOn] = useState(false);
 
-  // warm up the speech voices list (Chrome loads it async)
+  // warm up the speech voices list (Chrome loads it async) and preload the greeting clip
   useEffect(() => {
     if ("speechSynthesis" in window) speechSynthesis.getVoices();
+    sound.preloadWelcome();
   }, []);
 
   // lines start after the CRT power-on flash
